@@ -1,0 +1,149 @@
+q1)
+
+data
+msg1: .asciiz "Enter the no:"
+msgo: .asciiz "The no is odd\n"
+msge: .asciiz "The no is even\n"
+num: .word 0
+
+.text
+.globl main
+
+main:
+li $v0,4
+la $a0,msg1
+syscall
+
+li $v0,5
+syscall
+
+move $t0,$v0
+li $t1,2
+div $t0,$t1
+
+mfhi $t0
+beq $t0,$zero,even_no
+la $a0,msgo
+j print_msg
+
+even_no:
+la $a0,msge
+
+print_msg:
+li $v0,4
+syscall
+
+li $v0,10
+syscall
+
+.end main
+
+q2)  
+
+.data
+msg1: .asciiz "Enter an integer N: "
+result: .asciiz "The sum of digits is: "
+
+.text
+.globl main
+
+main:
+
+li $v0,4
+la $a0,msg1
+syscall
+
+li $v0,5
+syscall
+
+move $t0,$v0
+
+li $t1,0
+
+loop:
+beqz $t0,loopend
+
+li $t2,10
+div $t0,$t2
+
+mflo $t0
+mfhi $t3
+
+add $t1,$t1,$t3
+
+j loop
+
+loopend:
+li $v0,4
+la $a0,result
+syscall
+
+li $v0,1
+move $a0,$t1
+syscall
+
+li $v0,10
+syscall
+
+.end main
+
+q3)
+
+.data
+msg: .asciiz "Enter 5 integers"
+result: .asciiz "The final answer is:"
+
+.text
+.globl main
+
+main:
+
+li $v0,4
+la $a0,msg
+syscall
+
+li $v0,5
+syscall
+
+move $t0,$v0
+
+li $v0,5
+syscall
+
+move $t1,$v0
+
+li $v0,5
+syscall
+
+move $t2,$v0
+
+li $v0,5
+syscall
+
+move $t3,$v0
+
+li $v0,5
+syscall
+move $t4,$v0
+
+mul $t0,$t0,$t1
+div $t0,$t0,$t2
+div $t0,$t0,$t3
+mfhi $t0
+add $t0,$t0,$t4
+
+li $v0,4
+la $a0,result
+syscall
+
+li $v0,1
+move $a0,$t0
+syscall
+
+li $v0,10
+syscall
+
+.end main
+
+
+
