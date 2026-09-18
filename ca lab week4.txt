@@ -1,0 +1,135 @@
+q1)
+
+.data
+A: .word 12,45,7,23,89
+length: .word 5
+msg1: .asciiz "Enter element to search: "
+msgf: .asciiz "Element found at position "
+msgn: .asciiz "Element not found"
+
+.text
+.globl main
+
+main:
+
+li $v0,4
+la $a0,msg1
+syscall
+
+li $v0,5
+syscall
+
+move $t6,$v0
+
+la $t0,A
+lw $t1,length
+li $t2,0
+li $t3,0
+
+loop:
+bge $t2,$t1,loopend
+
+sll $t4,$t2,2
+add $t5,$t0,$t4
+lw $t7,0($t5)
+
+bne $t7,$t6,next
+
+li $t3,1
+j loopend
+
+next:
+addi $t2,$t2,1
+j loop
+
+loopend:
+beqz $t3,not_found
+
+li $v0,4
+la $a0,msgf
+syscall
+
+li $v0,1
+move $a0,$t2
+syscall
+
+j exit
+
+not_found:
+li $v0,4
+la $a0,msgn
+syscall
+
+exit:
+li $v0,10
+syscall
+
+.end main
+
+q2)
+
+.data
+A: .word 1,2,3,4,5
+B: .word 10,20,30,40,50
+C: .word 0,0,0,0,0
+msg: .asciiz "Array C: "
+space: .asciiz " "
+
+.text
+.globl main
+
+main:
+
+la $t0,A
+la $t1,B
+la $t2,C
+li $t3,0
+
+loop:
+bge $t3,5,loopend
+
+sll $t4,$t3,2
+
+add $t5,$t0,$t4
+lw $t6,0($t5)
+
+add $t5,$t1,$t4
+lw $t7,0($t5)
+
+add $t8,$t6,$t7
+
+add $t5,$t2,$t4
+sw $t8,0($t5)
+
+addi $t3,$t3,1
+j loop
+
+loopend:
+li $v0,4
+la $a0,msg
+syscall
+
+li $t3,0
+
+print_loop:
+bge $t3,5,exit
+
+sll $t4,$t3,2
+add $t5,$t2,$t4
+lw $a0,0($t5)
+
+li $v0,1
+syscall
+
+li $v0,4
+la $a0,space
+syscall
+
+addi $t3,$t3,1
+j print_loop
+
+exit:
+li $v0,10
+syscall
+
+.end main
