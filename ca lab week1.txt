@@ -1,0 +1,66 @@
+1) add.asm
+
+.text
+
+main:
+    li $t0, 10
+    li $t1, 20
+
+    add $a0, $t0, $t1
+
+    li $v0,
+    syscall
+
+2) hello.s
+
+.data
+msg:    .asciiz "Hello World"
+
+
+        .text
+
+main:   li $v0, 4       # syscall 4 (print_str)
+        la $a0, msg     # argument: string
+        syscall         # print the string
+
+
+        li $v0, 10
+         syscall
+
+3) sum.asm
+
+.data  
+prompt: .asciiz  "Enter N:  "
+result: .asciiz  "Sum =  "
+
+.text
+
+main:
+    # Print prompt
+    li $v0, 4
+    la $a0, prompt
+    syscall
+
+    # Read integer N
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    # Initialize sum and counter
+    li $t1, 0
+    li $t2, 1
+
+loop:
+    # check if counter > N
+    bgt $t2, $t0, exit
+
+    # sum = sum + counter
+    add $t1, $t1, $t2
+
+    # counter = counter + 1
+    addi $t2, $t2, 1
+
+    # Repeat loop
+    j loop
+
+exit:
