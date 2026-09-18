@@ -1,0 +1,155 @@
+q1)
+
+.data
+prompt1: .asciiz "Enter first value: "
+prompt2: .asciiz "Enter second value: "
+result:  .asciiz "Sum = "
+
+.text
+main:
+    li $v0, 4
+    la $a0, prompt1
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    li $v0, 4
+    la $a0, prompt2
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t1, $v0
+
+    add $t2, $t0, $t1
+
+    li $v0, 4
+    la $a0, result
+    syscall
+
+    li $v0, 1
+    move $a0, $t2
+    syscall
+
+    li $v0, 10
+    syscall
+
+q2)
+
+.data
+prompt: .asciiz "Enter N: "
+result: .asciiz "Sum = "
+
+.text
+main:
+    li $v0, 4
+    la $a0, prompt
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    li $t1, 0
+    li $t2, 1
+
+loop:
+    bgt $t2, $t0, exit
+    add $t1, $t1, $t2
+    addi $t2, $t2, 1
+    j loop
+
+exit:
+    li $v0, 4
+    la $a0, result
+    syscall
+
+    li $v0, 1
+    move $a0, $t1
+    syscall
+
+    li $v0, 10
+    syscall
+
+q3)
+
+data
+menu:    .asciiz "Select operation:\n1. Add\n2. Subtract\n3. Multiply\n4. Divide\nChoice: "
+prompt1: .asciiz "Enter first number: "
+prompt2: .asciiz "Enter second number: "
+result:  .asciiz "Result = "
+errmsg:  .asciiz "Invalid choice or division by zero\n"
+
+.text
+main:
+    li $v0, 4
+    la $a0, menu
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    li $v0, 4
+    la $a0, prompt1
+    syscall
+    li $v0, 5
+    syscall
+    move $t1, $v0
+
+    li $v0, 4
+    la $a0, prompt2
+    syscall
+    li $v0, 5
+    syscall
+    move $t2, $v0
+
+    beq $t0, 1, add_op
+    beq $t0, 2, sub_op
+    beq $t0, 3, mul_op
+    beq $t0, 4, div_op
+    j invalid
+
+add_op:
+    add $t3, $t1, $t2
+    j print_result
+
+sub_op:
+    sub $t3, $t1, $t2
+    j print_result
+
+mul_op:
+    mul $t3, $t1, $t2
+    j print_result
+
+div_op:
+    beq $t2, $zero, invalid
+    div $t1, $t2
+    mflo $t3
+    j print_result
+
+print_result:
+    li $v0, 4
+    la $a0, result
+    syscall
+
+    li $v0, 1
+    move $a0, $t3
+    syscall
+
+    j exit
+
+invalid:
+    li $v0, 4
+    la $a0, errmsg
+    syscall
+
+exit:
+    li $v0, 10
+    syscall
+
+
+
+
